@@ -47,4 +47,16 @@ Vagrant.configure("2") do |config|
     v.customize ["modifyvm", :id, "--name", "dbweb"]
     end
   end
+
+ config.vm.define "backupdbweb" do |backupdbweb|
+  backupdbweb.vm.box = "debian/stretch64"
+  backupdbweb.vm.hostname = 'backupdbweb'
+  backupdbweb.vm.network "private_network", ip: "192.168.56.105"
+
+  backupdbweb.vm.provider :virtualbox do |v|
+    v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    v.customize ["modifyvm", :id, "--memory", 512]
+    v.customize ["modifyvm", :id, "--name", "backupdbweb"]
+    end
+  end
 end
