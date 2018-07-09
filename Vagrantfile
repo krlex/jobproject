@@ -1,13 +1,13 @@
 Vagrant.configure("2") do |config|
- config.vm.define "haproxy" do |haproxy|
-  haproxy.vm.box = "debian/stretch64"
-  haproxy.vm.hostname = 'haproxy'
-  haproxy.vm.network "private_network", ip: "192.168.56.101"
+ config.vm.define "app" do |app|
+  app.vm.box = "debian/stretch64"
+  app.vm.hostname = 'app'
+  app.vm.network "private_network", ip: "192.168.56.101"
 
-  haproxy.vm.provider :virtualbox do |v|
+  app.vm.provider :virtualbox do |v|
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     v.customize ["modifyvm", :id, "--memory", 512]
-    v.customize ["modifyvm", :id, "--name", "haproxy"]
+    v.customize ["modifyvm", :id, "--name", "app"]
     end
  end
 
