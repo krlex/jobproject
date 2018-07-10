@@ -1,0 +1,29 @@
+sudo  -s
+apt update && apt upgrade -y && apt install -y apache2 vim git php mysql-server php libapache2-mod-php php-mcrypt php-cli
+mysql_secure_installation (sve sto treba da izmenimo je samo root sifra za bazu, a sve ostalo cemo odgovoriti sa Y(yes)) - za sada neka bude ovako
+
+=================================================================================
+Treba editovati fajl koji se nalazi u:
+/etc/apache2/mods-enabled/dir.conf
+
+<IfModule mod_dir.c>
+    DirectoryIndex index.html index.cgi index.pl index.php index.xhtml index.htm
+</IfModule>
+============================
+ovako treba da izgleda:
+
+<IfModule mod_dir.c>
+    DirectoryIndex index.php index.cgi index.pl index.html index.xhtml index.htm
+</IfModule>
+=================================================================================
+
+service apache2 restart
+
+Pravimo test stranicu:
+
+Treba da napravimo u /var/www/html/info.php
+
+<?php
+phpinfo();
+?>
+
