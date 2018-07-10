@@ -8,6 +8,7 @@ Vagrant.configure("2") do |config|
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     v.customize ["modifyvm", :id, "--memory", 512]
     v.customize ["modifyvm", :id, "--name", "app"]
+    config.vm.network "forwarded_port", guest: 80, host: 8080
     end
  end
 
@@ -20,6 +21,7 @@ Vagrant.configure("2") do |config|
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     v.customize ["modifyvm", :id, "--memory", 512]
     v.customize ["modifyvm", :id, "--name", "srv1web"]
+    config.vm.network "forwarded_port", guest: 80, host: 8180
     end
  end
 
@@ -33,6 +35,7 @@ Vagrant.configure("2") do |config|
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     v.customize ["modifyvm", :id, "--memory", 512]
     v.customize ["modifyvm", :id, "--name", "srv2web"]
+    config.vm.network "forwarded_port", guest: 80, host: 8280
     end
  end
 
@@ -45,6 +48,7 @@ Vagrant.configure("2") do |config|
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     v.customize ["modifyvm", :id, "--memory", 512]
     v.customize ["modifyvm", :id, "--name", "dbweb"]
+    config.vm.network "forwarded_port", guest: 80, host: 8380
     end
   end
 
@@ -57,6 +61,7 @@ Vagrant.configure("2") do |config|
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     v.customize ["modifyvm", :id, "--memory", 512]
     v.customize ["modifyvm", :id, "--name", "backupdbweb"]
+    config.vm.network "forwarded_port", guest: 80, host: 8480
     end
   end
 end
