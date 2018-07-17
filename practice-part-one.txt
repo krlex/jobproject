@@ -53,3 +53,50 @@ a2enmod rewrite
 apache2ctl configtest
 
 systemctl restart apache2
+--------------------------------------------------------------------------
+WORDPRESS
+
+cd /tmp
+
+curl -O https://wordpress.org/latest.tar.gz
+
+tar xzvf latest.tar.gz
+
+
+touch /tmp/wordpress/.htaccess
+chmod 660 /tmp/wordpress/.htaccess
+mkdir /tmp/wordpress/wp-content/upgrade
+
+
+sudo cp -a /tmp/wordpress/. /var/www/html
+
+sudo chown -R vagrant:www-data /var/www/html
+
+sudo chmod g+w /var/www/html/wp-content
+
+sudo chmod -R g+w /var/www/html/wp-content/themes
+sudo chmod -R g+w /var/www/html/wp-content/plugins
+
+
+curl -s https://api.wordpress.org/secret-key/1.1/salt/
+
+kopirati sta vam se ispise od komande curl u /var/www/html/wp-config.php
+
+vim /var/www/html/wp-config.php
+
+. . .
+
+define('DB_NAME', 'wordpress');
+
+/** MySQL database username */
+define('DB_USER', 'wordpressuser');
+
+/** MySQL database password */
+define('DB_PASSWORD', 'password');
+
+. . .
+
+
+
+
+
