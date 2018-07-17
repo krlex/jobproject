@@ -28,3 +28,28 @@ Treba da napravimo u /var/www/html/info.php
 phpinfo();
 ?>
 
+i=====================================================================
+mysql -u root -p
+
+CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+
+GRANT ALL ON wordpress.* TO 'wordpressuser'@'localhost' IDENTIFIED BY 'password';
+
+FLUSH PRIVILEGES;
+
+EXIT;
+
+
+systemctl restart apache2
+
+vim /etc/apache2/apache2.conf
+-------------------------------------------------------------------------
+<Directory /var/www/html/>
+    AllowOverride All
+</Directory>
+------------------------------------------------------------------------
+a2enmod rewrite
+
+apache2ctl configtest
+
+systemctl restart apache2
