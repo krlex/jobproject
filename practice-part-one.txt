@@ -28,7 +28,9 @@ Treba da napravimo u /var/www/html/info.php
 phpinfo();
 ?>
 
-i=====================================================================
+================PART TWO =====================================================
+apt install php-mysql
+
 mysql -u root -p
 
 CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
@@ -95,7 +97,6 @@ define('DB_USER', 'wordpressuser');
 define('DB_PASSWORD', 'password');
 
 . . .
-
 
 
 
