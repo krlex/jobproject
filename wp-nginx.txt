@@ -1,0 +1,86 @@
+sudo -s
+apt -y update &&  apt -y upgrade
+apt update &&  apt upgrade -y &&  apt install -y vim git php-fpm mysql-server php php-mcrypt php-cli php-mysql
+
+Instalacija najnovijeg nginx-a
+__________________________________________
+
+wget http://nginx.org/keys/nginx_signing.key
+apt-key add nginx_signing.key
+echo "deb http://nginx.org/packages/debian/ stretch nginx" | sudo tee -a /etc/apt/sources.list
+echo "deb-src http://nginx.org/packages/debian/ stretch nginx" | sudo tee -a /etc/apt/sources.list
+apt-get update; apt-get -y install nginx
+systemctl start nginx.service
+
+systemctl enable nginx.service
+
+vim /etc/php/7.0/fpm/php.ini
+cgi.fix_pathinfo=0
+
+vim /etc/php/7.0/fpm/pool.d/www.conf
+listen = /run/php/php7.0-fpm.sock
+
+VVVV
+
+listen = 127.0.0.1:9000
+systemctl restart php7.0-fpm.service
+=====================================================================
+vim /etc/nginx/conf.d/wordpress.conf
+
+server {
+   server_name localhost;
+   root /var/www/html/;
+
+   location / {
+       index index.php index.htm index.html;
+   }
+
+   location ~ \.php$ {
+      include /etc/nginx/fastcgi_params;
+      fastcgi_pass 127.0.0.1:9000;
+      fastcgi_index index.php;
+      fastcgi_param SCRIPT_FILENAME /usr/share/nginx/html/itzgeek.local$fastcgi_script_name;
+   }
+}
+
+service nginx restart
+
+==========================================================================
+
+mysql -uroot -p
+MariaDB [(none)]> CREATE DATABASE wordpress;
+MariaDB [(none)]> GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpressuser'@'localhost' IDENTIFIED BY 'password';
+MariaDB [(none)]> FLUSH PRIVILEGES;
+MariaDB [(none)]> \q
+
+cd /tmp
+
+curl -O https://wordpress.org/latest.tar.gz
+
+tar xzvf latest.tar.gz
+
+
+touch /tmp/wordpress/.htaccess
+chmod 660 /tmp/wordpress/.htaccess
+mkdir /tmp/wordpress/wp-content/upgrade
+
+ cp /tmp/wordpress/wp-config-sample.php /tmp/wordpress/wp-config.php
+
+ cp -a /tmp/wordpress/. /var/www/html
+
+ chown -R vagrant:www-data /var/www/html
+
+ chmod g+w /var/www/html/wp-content
+
+ chmod -R g+w /var/www/html/wp-content/themes
+ chmod -R g+w /var/www/html/wp-content/plugins
+
+
+
+curl -s https://api.wordpress.org/secret-key/1.1/salt/
+
+kopirati sta vam se ispise od komande curl u /var/www/html/wp-config.php
+
+vim /var/www/html/wp-config.php
+
+
