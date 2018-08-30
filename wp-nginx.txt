@@ -1,5 +1,6 @@
 sudo -s
-apt update &&  apt upgrade -y &&  apt install -y vim git php php-mcrypt php-cli php-mysql php-fpm net-tools curl mysql-server mysql-client
+apt -y update && sudo apt -y upgrade
+sudo apt install apt-transport-https lsb-release ca-certificates wget git vim mysql-server curl
 
 Instalacija najnovijeg nginx-a
 __________________________________________
@@ -13,36 +14,84 @@ systemctl start nginx.service
 
 systemctl enable nginx.service
 
-vim /etc/php/7.0/fpm/php.ini
-cgi.fix_pathinfo=0
-
-vim /etc/php/7.0/fpm/pool.d/www.conf
-listen = /run/php/php7.0-fpm.sock
-
-VVVV
-
-listen = 127.0.0.1:9000
-systemctl restart php7.0-fpm.service
-=====================================================================
-vim /etc/nginx/conf.d/wordpress.conf
-
-server {
-   server_name localhost;
-   root /var/www/html/;
-
-   location / {
-       index index.php index.htm index.html;
-   }
-
-   location ~ \.php$ {
-      include /etc/nginx/fastcgi_params;
-      fastcgi_pass 127.0.0.1:9000;
-      fastcgi_index index.php;
-      fastcgi_param SCRIPT_FILENAME /usr/share/nginx/html/itzgeek.local$fastcgi_script_name;
-   }
-}
 
 service nginx restart
+
+Instalacija PHP7.1 verzija
+----------------------------------------------
+
+wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
+sh -c 'echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list'
+apt install php7.1-common  php7.1-readline php7.1-fpm php7.1-cli php7.1-gd php7.1-mysql php7.1-mcrypt php7.1-curl php7.1-mbstring php7.1-opcache php7.1-json
+
+
+sed -i "s/memory_limit = .*/memory_limit = 256M/" /etc/php/7.1/fpm/php.ini
+sed -i "s/upload_max_filesize = .*/upload_max_filesize = 128M/" /etc/php/7.1/fpm/php.ini
+sed -i "s/zlib.output_compression = .*/zlib.output_compression = on/" /etc/php/7.1/fpm/php.ini
+sed -i "s/max_execution_time = .*/max_execution_time = 18000/" /etc/php/7.1/fpm/php.ini
+
+mv /etc/php/7.1/fpm/pool.d/www.conf /etc/php/7.1/fpm/pool.d/www.conf.org
+vim /etc/php/7.1/fpm/pool.d/www.conf
+--------------------------
+[www]
+user = www-data
+group = www-data
+listen = /run/php/php7.1-fpm.sock
+listen.owner = www-data
+listen.group = www-data
+listen.mode = 0666
+pm = ondemand
+pm.max_children = 5
+pm.process_idle_timeout = 10s
+pm.max_requests = 200
+chdir = /
+---------------------------
+
+systemctl restart php7.1-fpm
+---------------------------------------------------
+mkdir /etc/nginx/sites-available/
+mkdir /etc/nginx/sites-enabled/
+
+vim /etc/nginx/sites-available/wordpress
+
+server {
+  server_name localhost;
+    listen 80;
+      root /var/www/html/wordpress;
+      access_log /var/log/nginx/access.log;
+      error_log /var/log/nginx/error.log;
+      index index.php;
+      location / {
+          try_files $uri $uri/ /index.php?q=$uri&$args;
+      }
+
+      location ~* \.(jpg|jpeg|gif|css|png|js|ico|html)$ {
+          access_log off;
+              expires max;
+      }
+      location ~ /\.ht {
+          deny  all;
+      }
+
+      location ~ \.php$ {
+          fastcgi_index index.php;
+          fastcgi_keep_conn on;
+          include /etc/nginx/fastcgi_params;
+          fastcgi_pass unix:/run/php/php7.1-fpm.sock;
+          fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+      }
+}
+--------------------------------
+vim /etc/nginx/nginx.conf
+
+#include /etc/nginx/conf.d/*.conf;
+include /etc/nginx/sites-enabled/*;
+-------------------------------------
+ln -s /etc/nginx/sites-available/wordpress /etc/nginx/sites-enabled/wordpress
+
+sudo nginx -t
+sudo systemctl restart nginx
+
 
 ==========================================================================
 
@@ -58,6 +107,7 @@ curl -O https://wordpress.org/latest.tar.gz
 
 tar xzvf latest.tar.gz
 
+mkdir -p /var/www/html/
 
 touch /tmp/wordpress/.htaccess
 chmod 660 /tmp/wordpress/.htaccess
@@ -83,5 +133,3 @@ curl -s https://api.wordpress.org/secret-key/1.1/salt/
 kopirati sta vam se ispise od komande curl u /var/www/html/wp-config.php
 
 vim /var/www/html/wp-config.php
-
-
