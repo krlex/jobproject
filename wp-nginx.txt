@@ -65,6 +65,8 @@ mkdir /tmp/wordpress/wp-content/upgrade
 
  cp /tmp/wordpress/wp-config-sample.php /tmp/wordpress/wp-config.php
 
+ mkdir -p /var/www/html
+
  cp -a /tmp/wordpress/. /var/www/html
 
  chown -R vagrant:www-data /var/www/html
