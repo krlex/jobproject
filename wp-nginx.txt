@@ -1,6 +1,6 @@
 sudo -s
-apt -y update && sudo apt -y upgrade
-sudo apt install apt-transport-https lsb-release ca-certificates wget git vim mysql-server curl
+apt -y update && apt -y upgrade
+apt install apt-transport-https lsb-release ca-certificates wget git vim mysql-server curl
 
 Instalacija najnovijeg nginx-a
 __________________________________________
@@ -57,7 +57,7 @@ vim /etc/nginx/sites-available/wordpress
 server {
   server_name localhost;
     listen 80;
-      root /var/www/html/wordpress;
+      root /var/www/html/;
       access_log /var/log/nginx/access.log;
       error_log /var/log/nginx/error.log;
       index index.php;
