@@ -47,10 +47,10 @@ service nginx restart
 ==========================================================================
 
 mysql -uroot -p
-MariaDB [(none)]> CREATE DATABASE wordpress;
-MariaDB [(none)]> GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpressuser'@'localhost' IDENTIFIED BY 'password';
-MariaDB [(none)]> FLUSH PRIVILEGES;
-MariaDB [(none)]> \q
+CREATE DATABASE wordpress;
+GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpressuser'@'localhost' IDENTIFIED BY 'password';
+FLUSH PRIVILEGES;
+\q
 
 cd /tmp
 
