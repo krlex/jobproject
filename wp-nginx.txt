@@ -1,6 +1,5 @@
 sudo -s
-apt -y update &&  apt -y upgrade
-apt update &&  apt upgrade -y &&  apt install -y vim git php-fpm mysql-server php php-mcrypt php-cli php-mysql
+apt update &&  apt upgrade -y &&  apt install -y vim git php-fpm mysql-server php php-mcrypt php-cli php-mysql php-fpm net-tools curl mysql-server mysql-client
 
 Instalacija najnovijeg nginx-a
 __________________________________________

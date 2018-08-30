@@ -1,6 +1,6 @@
 Pre nego sto pokrenemo "vagrant up" komande treba prvo da izmenite po zelji u VagrantFile Ip adrese i samo host port izmenuti ...NE DIRATI guest port
 sudo  -s
-apt update && apt upgrade -y && apt install -y apache2 vim git php mysql-server php libapache2-mod-php php-mcrypt php-cli
+apt update && apt upgrade -y && apt install -y apache2 vim git php mysql-server php libapache2-mod-php php-mcrypt php-cli curl
 mysql_secure_installation (sve sto treba da izmenimo je samo root sifra za bazu, a sve ostalo cemo odgovoriti sa Y(yes)) - za sada neka bude ovako
 
 =================================================================================
