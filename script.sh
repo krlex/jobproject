@@ -1,8 +1,9 @@
-#! /bin/bash
+#! /bin/sh
 
 sudo -s
 apt -y update && apt -y upgrade
 apt install apt-transport-https lsb-release ca-certificates wget git vim mysql-server curl -y
+
 
 #Instalacija najnovijeg nginx-a
 #__________________________________________
@@ -16,11 +17,10 @@ systemctl start nginx.service
 
 systemctl enable nginx.service
 
-
 service nginx restart
 
 #Instalacija PHP7.1 verzija
-----------------------------------------------
+#----------------------------------------------
 
 wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
 sh -c 'echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list'
@@ -34,33 +34,28 @@ sed -i "s/zlib.output_compression = .*/zlib.output_compression = on/" /etc/php/7
 sed -i "s/max_execution_time = .*/max_execution_time = 18000/" /etc/php/7.1/fpm/php.ini
 
 mv /etc/php/7.1/fpm/pool.d/www.conf /etc/php/7.1/fpm/pool.d/www.conf.org
-#vim /etc/php/7.1/fpm/pool.d/www.conf
-cp /vagrant/templates/www.conf /etc/php/7.1/pool.d/
-cp /vagrant/templates/wordpress.conf /etc/nginx/conf.d/
---------------------------
----------------------------
+sudo cp /vagrant/templates/www.conf /etc/php/7.1/fpm/pool.d/
 
 systemctl restart php7.1-fpm
----------------------------------------------------
-#mkdir /etc/nginx/sites-available/
-#mkdir /etc/nginx/sites-enabled/
-#vim /etc/nginx/sites-available/wordpress
-
-#vim /etc/nginx/nginx.conf
-
-#include /etc/nginx/conf.d/*.conf;
-#include /etc/nginx/sites-enabled/*;
+#--------------------------
 rm /etc/nginx/conf.d/default.conf
+cp /vagrant/templates/wordpress.conf /etc/nginx/conf.d/
+service nginx restart
 
-sed -i 's/conf.d/sites-enabled/g' /etc/nginx/nginx.conf
--------------------------------------
-#ln -s /etc/nginx/sites-available/wordpress /etc/nginx/sites-enabled/wordpress
+#---------------------------------------------------
 
-sudo nginx -t
-sudo systemctl restart nginx
+systemctl restart nginx
 
+# Konfiguracija MYSQL-a
+#------------------------------------------
 
-==========================================================================
+mysql -uroot <<MYSQL_SCRIPT
+CREATE DATABASE wordpress;
+GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpressuser'@'localhost' IDENTIFIED BY 'password';
+FLUSH PRIVILEGES;
+MYSQL_SCRIPT
+
+#------------------------------------------
 
 cd /tmp
 
@@ -74,19 +69,18 @@ touch /tmp/wordpress/.htaccess
 chmod 660 /tmp/wordpress/.htaccess
 mkdir /tmp/wordpress/wp-content/upgrade
 
- cp /tmp/wordpress/wp-config-sample.php /tmp/wordpress/wp-config.php
+cp /tmp/wordpress/wp-config-sample.php /tmp/wordpress/wp-config.php
 
- mkdir -p /var/www/html
+mkdir -p /var/www/html
 
- cp -a /tmp/wordpress/. /var/www/html
+cp -a /tmp/wordpress/. /var/www/html
 
- chown -R vagrant:www-data /var/www/html
+chown -R vagrant:www-data /var/www/html
 
- chmod g+w /var/www/html/wp-content
+chmod g+w /var/www/html/wp-content
 
- chmod -R g+w /var/www/html/wp-content/themes
- chmod -R g+w /var/www/html/wp-content/plugins
- chmod 777 /tmp
+chmod -R g+w /var/www/html/wp-content/themes
+chmod -R g+w /var/www/html/wp-content/plugins
 
 
 
@@ -96,8 +90,3 @@ sed -i 's/username_here/wordpressuser/g' /var/www/html/wp-config.php
 sed -i 's/password_here/password/g' /var/www/html/wp-config.php
 
 #sed -i 's/localhost/192.168.56.104/g' /var/www/html/wp-config.php
-
-
-#kopirati sta vam se ispise od komande curl u /var/www/html/wp-config.php
-
-#vim /var/www/html/wp-config.php
