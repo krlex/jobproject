@@ -1,0 +1,105 @@
+Pre nego sto pokrenemo "vagrant up" komande treba prvo da izmenite po zelji u VagrantFile Ip adrese i samo host port izmenuti ...NE DIRATI guest port
+sudo  -s
+apt update && apt upgrade -y && apt install -y apache2 vim git php mysql-server php libapache2-mod-php php-mcrypt php-cli curl
+mysql_secure_installation (sve sto treba da izmenimo je samo root sifra za bazu, a sve ostalo cemo odgovoriti sa Y(yes)) - za sada neka bude ovako
+
+=================================================================================
+Treba editovati fajl koji se nalazi u:
+/etc/apache2/mods-enabled/dir.conf
+
+<IfModule mod_dir.c>
+    DirectoryIndex index.html index.cgi index.pl index.php index.xhtml index.htm
+</IfModule>
+============================
+ovako treba da izgleda:
+
+<IfModule mod_dir.c>
+    DirectoryIndex index.php index.cgi index.pl index.html index.xhtml index.htm
+</IfModule>
+=================================================================================
+
+service apache2 restart
+
+Pravimo test stranicu:
+
+Treba da napravimo u /var/www/html/info.php
+
+<?php
+phpinfo();
+?>
+
+================PART TWO =====================================================
+apt install php-mysql
+
+mysql -u root -p
+
+CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+
+GRANT ALL ON wordpress.* TO 'wordpressuser'@'localhost' IDENTIFIED BY 'password';
+
+FLUSH PRIVILEGES;
+
+EXIT;
+
+
+systemctl restart apache2
+
+vim /etc/apache2/apache2.conf
+-------------------------------------------------------------------------
+<Directory /var/www/html/>
+    AllowOverride All
+</Directory>
+------------------------------------------------------------------------
+a2enmod rewrite
+
+apache2ctl configtest
+
+systemctl restart apache2
+--------------------------------------------------------------------------
+WORDPRESS
+
+cd /tmp
+
+curl -O https://wordpress.org/latest.tar.gz
+
+tar xzvf latest.tar.gz
+
+
+touch /tmp/wordpress/.htaccess
+chmod 660 /tmp/wordpress/.htaccess
+mkdir /tmp/wordpress/wp-content/upgrade
+
+
+sudo cp -a /tmp/wordpress/. /var/www/html
+
+sudo chown -R vagrant:www-data /var/www/html
+
+sudo chmod g+w /var/www/html/wp-content
+
+sudo chmod -R g+w /var/www/html/wp-content/themes
+sudo chmod -R g+w /var/www/html/wp-content/plugins
+
+
+curl -s https://api.wordpress.org/secret-key/1.1/salt/
+
+kopirati sta vam se ispise od komande curl u /var/www/html/wp-config.php
+
+cp /var/www/html/wp-config-sample.php /var/www/html/wp-config.php
+
+vim /var/www/html/wp-config.php
+
+. . .
+
+define('DB_NAME', 'wordpress');
+
+/** MySQL database username */
+define('DB_USER', 'wordpressuser');
+
+/** MySQL database password */
+define('DB_PASSWORD', 'password');
+
+. . .
+
+
+
+
