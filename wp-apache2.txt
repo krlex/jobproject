@@ -1,5 +1,5 @@
 0. new build vagranta za svaki slucaj da nesto nije ostalo
-
+ 
 1. Pre nego sto pokrenemo "vagrant up" komande treba prvo da izmenite po zelji u VagrantFile Ip adrese i samo host port izmenuti ...NE DIRATI guest port
 
 vagrant up srv1web
