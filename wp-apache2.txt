@@ -1,8 +1,17 @@
-Pre nego sto pokrenemo "vagrant up" komande treba prvo da izmenite po zelji u VagrantFile Ip adrese i samo host port izmenuti ...NE DIRATI guest port
-sudo  -s
-apt update && apt upgrade -y && apt install -y apache2 vim git php mysql-server php libapache2-mod-php php-mcrypt php-cli curl
+0. new build vagranta za svaki slucaj da nesto nije ostalo
+
+1. Pre nego sto pokrenemo "vagrant up" komande treba prvo da izmenite po zelji u VagrantFile Ip adrese i samo host port izmenuti ...NE DIRATI guest port
+
+vagrant up srv1web
+vagrant ssh srv1web
+
+2. sudo  -s
+
+apt update && apt upgrade -y && apt install -y apache2 vim git php mysql-server libapache2-mod-php php-mcrypt php-cli curl mariadb-server
+
 mysql_secure_installation (sve sto treba da izmenimo je samo root sifra za bazu, a sve ostalo cemo odgovoriti sa Y(yes)) - za sada neka bude ovako
 
+3.
 =================================================================================
 Treba editovati fajl koji se nalazi u:
 /etc/apache2/mods-enabled/dir.conf
@@ -20,7 +29,7 @@ ovako treba da izgleda:
 
 service apache2 restart
 
-Pravimo test stranicu:
+4. Pravimo test stranicu:
 
 Treba da napravimo u /var/www/html/info.php
 
@@ -33,6 +42,7 @@ apt install php-mysql
 
 mysql -u root -p
 
+(u db interfejsu)
 CREATE DATABASE wordpress DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
 GRANT ALL ON wordpress.* TO 'wordpressuser'@'localhost' IDENTIFIED BY 'password';
@@ -40,7 +50,7 @@ GRANT ALL ON wordpress.* TO 'wordpressuser'@'localhost' IDENTIFIED BY 'password'
 FLUSH PRIVILEGES;
 
 EXIT;
-
+(izasli iz interfejsa)
 
 systemctl restart apache2
 
@@ -57,6 +67,7 @@ apache2ctl configtest
 systemctl restart apache2
 --------------------------------------------------------------------------
 WORDPRESS
+(malo pojasnjenje narednih desetak komandi: skidamo arhivu i razvijamo fajlove iz nje u temp folder, zongliramo sa pozicijama fajlova i menjamo atribute fajlova da bi namestili da sve radi)
 
 cd /tmp
 
@@ -80,13 +91,16 @@ sudo chmod -R g+w /var/www/html/wp-content/themes
 sudo chmod -R g+w /var/www/html/wp-content/plugins
 
 
-curl -s https://api.wordpress.org/secret-key/1.1/salt/
-
-kopirati sta vam se ispise od komande curl u /var/www/html/wp-config.php
-
 cp /var/www/html/wp-config-sample.php /var/www/html/wp-config.php
 
+curl -s https://api.wordpress.org/secret-key/1.1/salt/
+(iskopirati output komande u clipboard)
+
 vim /var/www/html/wp-config.php
+
+. . .
+
+(kopirati sta vam se ispise od komande curl u adekvatan prostor za kljuceve)
 
 . . .
 
@@ -99,6 +113,11 @@ define('DB_USER', 'wordpressuser');
 define('DB_PASSWORD', 'password');
 
 . . .
+(exit vim)
+
+
+done and done :D
+otvaranjem localhost:(adekvatan port iz vagrant file-a) bi trebalo da vam da wordpress stranicu, ako ste sve odradili kako treba.
 
 
 
