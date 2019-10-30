@@ -1,6 +1,6 @@
 Vagrant.configure("2") do |config|
  config.vm.define "app" do |app|
-  app.vm.box = "debian/buster64"
+  app.vm.box = "ubuntu/bionic64"
   app.vm.hostname = 'app'
   app.vm.network "private_network", ip: "192.168.56.101"
 
@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
  end
 
  config.vm.define "srv1web" do |srv1web|
-  srv1web.vm.box = "debian/buster64"
+  srv1web.vm.box = "ubuntu/bionic64"
   srv1web.vm.hostname = 'srv1web'
   srv1web.vm.network "private_network", ip: "192.168.56.102"
 
@@ -24,7 +24,7 @@ Vagrant.configure("2") do |config|
  end
 
  config.vm.define "srv2web" do |srv2web|
-  srv2web.vm.box = "debian/buster64"
+  srv2web.vm.box = "ubuntu/bionic64"
   srv2web.vm.hostname = 'srv2web'
   srv2web.vm.network "private_network", ip: "192.168.56.103"
 
@@ -37,7 +37,7 @@ Vagrant.configure("2") do |config|
  end
 
  config.vm.define "dbweb" do |dbweb|
-  dbweb.vm.box = "debian/buster64"
+  dbweb.vm.box = "ubuntu/bionic64"
   dbweb.vm.hostname = 'dbweb'
   dbweb.vm.network "private_network", ip: "192.168.56.104"
 
@@ -49,7 +49,7 @@ Vagrant.configure("2") do |config|
   end
 
  config.vm.define "backupdbweb" do |backupdbweb|
-  backupdbweb.vm.box = "debian/buster64"
+  backupdbweb.vm.box = "ubuntu/bionic64"
   backupdbweb.vm.hostname = 'backupdbweb'
   backupdbweb.vm.network "private_network", ip: "192.168.56.105"
 
