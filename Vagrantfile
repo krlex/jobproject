@@ -1,62 +1,62 @@
 Vagrant.configure("2") do |config|
- config.vm.define "app" do |app|
-  app.vm.box = "centos/7"
+ config.vm.define "APU" do |app|
+  app.vm.box = "krlex/freebsd-12.1.2-cbsd"
   app.vm.hostname = 'app'
   app.vm.network "private_network", ip: "192.168.56.101"
 
   app.vm.provider :virtualbox do |v|
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-    v.customize ["modifyvm", :id, "--memory", 1512]
+    v.customize ["modifyvm", :id, "--memory", 1048]
     v.customize ["modifyvm", :id, "--name", "app"]
     end
  end
 
- config.vm.define "srv1web" do |srv1web|
-  srv1web.vm.box = "centos/7"
-  srv1web.vm.hostname = 'srv1web'
-  srv1web.vm.network "private_network", ip: "192.168.56.102"
+ config.vm.define "host01" do |host01|
+  host01.vm.box = "krlex/freebsd-12.1.2-cbsd"
+  host01.vm.hostname = 'host01'
+  host01.vm.network "private_network", ip: "192.168.56.102"
 
-  srv1web.vm.provider :virtualbox do |v|
+  host01.vm.provider :virtualbox do |v|
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-    v.customize ["modifyvm", :id, "--memory", 1512]
-    v.customize ["modifyvm", :id, "--name", "srv1web"]
+    v.customize ["modifyvm", :id, "--memory", 1048]
+    v.customize ["modifyvm", :id, "--name", "host01"]
     end
  end
 
- config.vm.define "srv2web" do |srv2web|
-  srv2web.vm.box = "centos/7"
-  srv2web.vm.hostname = 'srv2web'
-  srv2web.vm.network "private_network", ip: "192.168.56.103"
+ config.vm.define "host02" do |host02|
+  host02.vm.box = "krlex/freebsd-12.1.2-cbsd"
+  host02.vm.hostname = 'host02'
+  host02.vm.network "private_network", ip: "192.168.56.103"
 
 
-  srv2web.vm.provider :virtualbox do |v|
+  host02.vm.provider :virtualbox do |v|
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-    v.customize ["modifyvm", :id, "--memory", 1512]
-    v.customize ["modifyvm", :id, "--name", "srv2web"]
+    v.customize ["modifyvm", :id, "--memory", 1048]
+    v.customize ["modifyvm", :id, "--name", "host02"]
     end
  end
 
- config.vm.define "dbweb" do |dbweb|
-  dbweb.vm.box = "centos/7"
-  dbweb.vm.hostname = 'dbweb'
-  dbweb.vm.network "private_network", ip: "192.168.56.104"
+ config.vm.define "dbmaster" do |dbmaster|
+  dbmaster.vm.box = "krlex/freebsd-12.1.2-cbsd"
+  dbmaster.vm.hostname = 'dbmaster'
+  dbmaster.vm.network "private_network", ip: "192.168.56.104"
 
-  dbweb.vm.provider :virtualbox do |v|
+  dbmaster.vm.provider :virtualbox do |v|
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     v.customize ["modifyvm", :id, "--memory", 512]
-    v.customize ["modifyvm", :id, "--name", "dbweb"]
+    v.customize ["modifyvm", :id, "--name", "dbmaster"]
     end
   end
 
- config.vm.define "backupdbweb" do |backupdbweb|
-  backupdbweb.vm.box = "centos/7"
-  backupdbweb.vm.hostname = 'backupdbweb'
-  backupdbweb.vm.network "private_network", ip: "192.168.56.105"
+ config.vm.define "dbslave" do |dbslave|
+  dbslave.vm.box = "krlex/freebsd-12.1.2-cbsd"
+  dbslave.vm.hostname = 'dbslave'
+  dbslave.vm.network "private_network", ip: "192.168.56.105"
 
-  backupdbweb.vm.provider :virtualbox do |v|
+  dbslave.vm.provider :virtualbox do |v|
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     v.customize ["modifyvm", :id, "--memory", 512]
-    v.customize ["modifyvm", :id, "--name", "backupdbweb"]
+    v.customize ["modifyvm", :id, "--name", "dbslave"]
     end
   end
 end
