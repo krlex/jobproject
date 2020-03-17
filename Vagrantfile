@@ -6,8 +6,9 @@ Vagrant.configure("2") do |config|
 
   app.vm.provider :virtualbox do |v|
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-    v.customize ["modifyvm", :id, "--memory", 512]
+    v.customize ["modifyvm", :id, "--memory", 1512]
     v.customize ["modifyvm", :id, "--name", "app"]
+    v.customize ["modifyvm", :id, "--cpus", 2]
     end
  end
 
@@ -18,8 +19,9 @@ Vagrant.configure("2") do |config|
 
   srv1web.vm.provider :virtualbox do |v|
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-    v.customize ["modifyvm", :id, "--memory", 512]
+    v.customize ["modifyvm", :id, "--memory", 1512]
     v.customize ["modifyvm", :id, "--name", "srv1web"]
+    v.customize ["modifyvm", :id, "--cpus", 2]
     end
  end
 
@@ -31,8 +33,9 @@ Vagrant.configure("2") do |config|
 
   srv2web.vm.provider :virtualbox do |v|
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-    v.customize ["modifyvm", :id, "--memory", 512]
+    v.customize ["modifyvm", :id, "--memory", 1512]
     v.customize ["modifyvm", :id, "--name", "srv2web"]
+    v.customize ["modifyvm", :id, "--cpus", 2]
     end
  end
 
