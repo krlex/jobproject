@@ -2,7 +2,7 @@ Vagrant.configure("2") do |config|
  config.vm.define "app" do |app|
   app.vm.box = "debian/buster64"
   app.vm.hostname = 'app'
-  app.vm.network "private_network", ip: "192.168.56.101"
+  app.vm.network "private_network", type: "dhcp"
 
   app.vm.provider :virtualbox do |v|
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
@@ -14,7 +14,7 @@ Vagrant.configure("2") do |config|
  config.vm.define "srv1web" do |srv1web|
   srv1web.vm.box = "debian/buster64"
   srv1web.vm.hostname = 'srv1web'
-  srv1web.vm.network "private_network", ip: "192.168.56.102"
+  srv1web.vm.network "private_network", type: "dhcp"
 
   srv1web.vm.provider :virtualbox do |v|
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
@@ -26,7 +26,7 @@ Vagrant.configure("2") do |config|
  config.vm.define "srv2web" do |srv2web|
   srv2web.vm.box = "debian/buster64"
   srv2web.vm.hostname = 'srv2web'
-  srv2web.vm.network "private_network", ip: "192.168.56.103"
+  srv2web.vm.network "private_network", type: "dhcp"
 
 
   srv2web.vm.provider :virtualbox do |v|
@@ -39,7 +39,7 @@ Vagrant.configure("2") do |config|
  config.vm.define "dbweb" do |dbweb|
   dbweb.vm.box = "debian/buster64"
   dbweb.vm.hostname = 'dbweb'
-  dbweb.vm.network "private_network", ip: "192.168.56.104"
+  dbweb.vm.network "private_network", type: "dhcp"
 
   dbweb.vm.provider :virtualbox do |v|
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
@@ -51,7 +51,7 @@ Vagrant.configure("2") do |config|
  config.vm.define "backupdbweb" do |backupdbweb|
   backupdbweb.vm.box = "debian/buster64"
   backupdbweb.vm.hostname = 'backupdbweb'
-  backupdbweb.vm.network "private_network", ip: "192.168.56.105"
+  backupdbweb.vm.network "private_network", type: "dhcp"
 
   backupdbweb.vm.provider :virtualbox do |v|
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
